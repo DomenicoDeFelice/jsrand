@@ -60,3 +60,21 @@ If `x` is specified, it is used as the random number (between 0 inclusive and 1 
 Srand.randomIntegerIn(250, 275, Math.random()); // => 262
 ```
 If `x` is `undefined`, instance/Srand random() is used.
+
+In the uncommon case the variable `Srand` is already used, `noConflict()` restores its initial value and returns the `Srand` object (`dfd.Srand`can be used as well.)
+
+```Javascript
+Srand = "my value";
+
+/* ........... */
+/* load jsrand */
+/* ........... */
+
+var mySrand = Srand.noConflict();
+Srand; // => "my value"
+
+var foo = new mySrand(101);
+foo.random(); // => 0.45733246579766273
+
+dfd.Srand.random(); // => 0.9795262040570378
+```
