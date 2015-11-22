@@ -2,7 +2,7 @@
   jsrand v1.0
   https://github.com/DomenicoDeFelice/jsrand
 
-  License: none/public domain, just keep this comment
+  @license none/public domain, just leave this comment.
 */
 
 if (!window.dfd) {
