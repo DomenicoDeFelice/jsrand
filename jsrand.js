@@ -5,23 +5,25 @@
   @license none/public domain, just leave this comment.
 */
 
-if (!window.dfd) {
-    window.dfd = {};
+!function (global) {
+
+if (!global.dfd) {
+    global.dfd = {};
 }
 
 dfd.Srand = Srand = (function (oldValue) {
     var constructor = function (seed) {
-	if (seed !== undefined) {
-	    this.seed(seed);
-	} else {
-	    this.randomize();
-	}
+        if (seed !== undefined) {
+            this.seed(seed);
+        } else {
+            this.randomize();
+        }
     };
 
     constructor._oldSrand = oldValue;
 
     return constructor;
-})(window.Srand);
+})(global.Srand);
 
 Srand.prototype = {};
 
@@ -30,7 +32,7 @@ Srand.prototype = {};
 // The seed can be any float or integer number.
 Srand.seed = Srand.prototype.seed = function (seed) {
     if (seed === undefined) {
-	return this._seed;
+        return this._seed;
     }
 
     // Uses only one seed (mw), mz is fixed.
@@ -82,7 +84,7 @@ Srand.random = Srand.prototype.random = function () {
 // If `x` is not specified, object/Srand random() is used.
 Srand.randomIn = Srand.prototype.randomIn = function (a, b, x) {
     if (x === undefined) {
-	x = this.random();
+        x = this.random();
     }
 
     return a + x * (b - a);
@@ -109,3 +111,5 @@ Srand.noConflict = function () {
     Srand = dfd.Srand._oldSrand;
     return dfd.Srand;
 };
+
+}(window);
