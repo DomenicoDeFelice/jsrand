@@ -1,7 +1,7 @@
 jsrand
 ======
 
-A simple (~60 LOCs) Javascript library for seeded pseudo-random number generation.  
+A simple (~60 LOCs, 1.4KB minified) Javascript library for seeded pseudo-random number generation.  
 
 Numbers are generated using a one-seeded version of the [multiply-with-carry method by George Marsaglia](http://en.wikipedia.org/wiki/Multiply-with-carry). While this method is okay for most applications, it is not cryptographically strong.
 
