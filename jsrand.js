@@ -1,5 +1,5 @@
 /*
-  jsrand v1.0
+  jsrand v1.2
   https://github.com/DomenicoDeFelice/jsrand
 
   @license none/public domain, just leave this comment.
@@ -102,6 +102,22 @@ Srand.randomIntegerIn = Srand.prototype.randomIntegerIn = function (min, max, x)
     }
 
     return min + Math.floor(x * (max - min + 1));
+};
+
+// Utility function that returns a random element from the array
+// passed as argument.
+// If `x` is specified, it is used as the random number (between 0
+// inclusive and 1 exclusive, e.g., Math.random() could be passed as
+// argument).
+// If `x` is not specified, object/Srand random() is used.
+Srand.choice = Srand.prototype.choice = function (arr, x) {
+    if (arr.length === 0) {
+        return undefined;
+    }
+
+    var randomIndex = this.randomIntegerIn(0, arr.length-1, x);
+
+    return arr[randomIndex];
 };
 
 // In the uncommon case the variable `Srand` is already used,

@@ -81,3 +81,43 @@ QUnit.test('randomize sets a new seed and returns it', function (assert) {
     assert.ok(Srand.seed() === new_seed);
 });
 
+QUnit.test('choice with an empty array returns undefined', function (assert) {
+    Srand.randomize();
+
+    assert.ok(Srand.choice([]) === undefined);
+    assert.ok(Srand.choice([], 0.5) === undefined);
+});
+
+QUnit.test('choice with an array with 1 element always returns that element', function (assert) {
+    Srand.randomize();
+
+    for (var i=0; i<10; i++) {
+        assert.ok(Srand.choice(['foo']) === 'foo');
+    }
+});
+
+QUnit.test('choice returns elements from the passed array and not always the same', function (assert) {
+    Srand.randomize();
+
+    var arr = [];
+    for (var i=0; i<10; i++) {
+        arr.push(i);
+    }
+
+    var all_equal = true;
+    var first;
+
+    for (i=0; i<100; i++) {
+        var choice = Srand.choice(arr);
+
+        if (i === 0) {
+            first = choice;
+        } else if (choice !== first) {
+            all_equal = false;
+        }
+
+        assert.ok(choice >= 0 && choice<10);
+    }
+
+    assert.notOk(all_equal);
+});

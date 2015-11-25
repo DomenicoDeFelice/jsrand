@@ -61,6 +61,21 @@ Srand.randomIntegerIn(250, 275, Math.random()); // => 262
 ```
 If `x` is `undefined`, instance/Srand random() is used.
 
+`choice(arr [, x])` returns a random element from the array `arr` or `undefined` if the array is empty.
+```Javascript
+bar.choice([1, 2, 3]); // => 2
+bar.choice([]); // => undefined
+
+Srand.choice([1, 2, 3]); // => 3
+Srand.choice([]); // => undefined
+```
+
+If `x` is specified, it is used as the random number (between 0 inclusive and 1 exclusive), e.g., `Math.random()` can be used:
+
+```Javascript
+Srand.choice([1, 2, 3], Math.random()); // => 3
+```
+
 In the uncommon case the variable `Srand` is already used, `noConflict()` restores its initial value and returns the `Srand` object (`dfd.Srand`can be used as well.)
 
 ```Javascript
