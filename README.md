@@ -172,6 +172,7 @@ Returns a random element from `arr`.
 If `arr` is empty, an exception is thrown.
 </td>
 </tr>
+<tr></tr>
 <tr>
 <td id="choices">
 
@@ -190,6 +191,7 @@ If `k` > 0 and `arr` is empty, throws an exception.
 For an alternative without replacement, see [`sample`](#sample).
 </td>
 </tr>
+<tr></tr>
 <tr>
 <td id="getstate">
 
@@ -204,6 +206,7 @@ Returns an object with the state of the generator.
 Use [`setState`](#setstate) to resume the state.
 </td>
 </tr>
+<tr></tr>
 <tr>
 <td id="inrange">
 
@@ -217,6 +220,7 @@ inRange(a: number, b: number): number
 Returns a pseudo-random float number between `a` inclusive and `b` exclusive.
 </td>
 </tr>
+<tr></tr>
 <tr>
 <td id="intinrange">
 
@@ -230,6 +234,7 @@ intInRange(min: number, max: number): number
 Returns a psuedo-random integer between `min` and `max` inclusive.
 </td>
 </tr>
+<tr></tr>
 <tr>
 <td id="noconflict">
 
@@ -255,6 +260,7 @@ Srand; // "my value"
 
 </td>
 </tr>
+<tr></tr>
 <tr>
 <td id="random">
 
@@ -270,6 +276,7 @@ Returns a pseudo-random float number between 0 inclusive and 1 exclusive.
 The algorithm used is a one-seeded version of the [multiply-with-carry method by George Marsaglia](https://en.wikipedia.org/wiki/Multiply-with-carry_pseudorandom_number_generator).
 </td>
 </tr>
+<tr></tr>
 <tr>
 <td id="randomize">
 
@@ -282,6 +289,7 @@ randomize(): number
 Sets and returns a random seed.
 </td>
 </tr>
+<tr></tr>
 <tr>
 <td id="sample">
 
@@ -299,6 +307,7 @@ If `k > arr.length`, an exception is thrown.
 For an alternative with replacement, see [`choices`](#choices).
 </td>
 </tr>
+<tr></tr>
 <tr>
 <td id="seed">
 
@@ -313,6 +322,7 @@ Sets or gets (if no argument is given) the seed.
 The seed can be any float or integer number.
 </td>
 </tr>
+<tr></tr>
 <tr>
 <td id="setstate">
 
@@ -326,6 +336,7 @@ setState(state: State): void
 Resume a state previously returned by [`getState`](#getstate).
 </td>
 </tr>
+<tr></tr>
 <tr>
 <td id="shuffle">
 
