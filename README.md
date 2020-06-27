@@ -19,14 +19,29 @@ $ npm install jsrand
 ### Browser
 Just download [dist/jsrand.min.js](https://raw.githubusercontent.com/DomenicoDeFelice/jsrand/master/dist/jsrand.min.js) and (optionally) [dist/jsrand.min.js.map](https://raw.githubusercontent.com/DomenicoDeFelice/jsrand/master/dist/jsrand.min.js.map) and include it in your app:
 
-```HTML
+## Usage
+
+<table>
+<thead>
+<tr>
+<th>Browser</th>
+<th>NPM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+
+```javascript
 <script src="jsrand.min.js"></script>
 ```
 
-## Usage
-### NPM
+This will define a global `Srand` object. If the name `Srand` is already taken, see `noConflict`.
 
-```Javascript
+</td>
+<td>
+
+```javascript
 const Srand = require('jsrand');
 ```
 
@@ -36,28 +51,27 @@ or
 import Srand from 'jsrand';
 ```
 
-Use Srand according to the following API.
+</td>
+</tr>
+</tbody>
+</table>
 
-### Browser
-The script will create a global `Srand` object, to be used according to the following API.
+All methods can be used either statically:
+```Javascript
+Srand.seed(10); // 10
+Srand.random(); // 0.4569510892033577
+```
+or instanciating a new generator:
+```Javascript
+const rnd = new Srand(10);
+rnd.random(); // 0.4569510892033577
 
-In the uncommon case the variable `Srand` is already taken, see `noConflict`.
+const othr = new Srand(rnd.seed());
+othr.random(); // 0.4569510892033577
+```
+
 
 ## API
-jsrand can be used statically
-```Javascript
-Srand.seed(10); // => 10
-Srand.random(); // => 0.4569510892033577
-```
-or by creating an instance
-```Javascript
-var foo = new Srand(10);
-foo.random(); // => 0.4569510892033577
-
-var bar = new Srand(foo.seed());
-bar.random(); // => 0.4569510892033577
-```
-
 If a seed is not specified, a random one is chosen:
 ```Javascript
 var baz = new Srand();
