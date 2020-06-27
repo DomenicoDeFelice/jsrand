@@ -1,5 +1,5 @@
 {
-  "name": "jsrand",
+  "name": "seeded-rand",
   "version": "2.0.0",
   "description": "A simple seeded pseudo-random number generator",
   "main": "dist/jsrand.js",
