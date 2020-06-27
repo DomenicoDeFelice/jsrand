@@ -1,9 +1,9 @@
-# jsrand
+# jsrand a.k.a. seeded-rand
 [![Build Status](https://travis-ci.com/DomenicoDeFelice/jsrand.svg?branch=master)](https://travis-ci.com/DomenicoDeFelice/jsrand)
 
 A seeded pseudo-random number generator for JavaScript.
 
-It can be used as either a plain script or as a Node.js module. When served gzipped, it weights only 1.7KB.
+It can be used as either a plain script or as a [Node.js module](https://www.npmjs.com/package/seeded-rand). When served gzipped, it weights only 1.7KB.
 
 Numbers are generated using a one-seeded version of the [multiply-with-carry method by George Marsaglia](https://en.wikipedia.org/wiki/Multiply-with-carry_pseudorandom_number_generator). While this method is okay for most applications, it is not cryptographically strong.
 
@@ -35,7 +35,7 @@ jsrand supports saving and restoring the generator state and common operations o
 ## Install
 ### NPM
 ```
-$ npm install jsrand
+$ npm install seeded-rand
 ```
 
 ### Plain script
@@ -64,13 +64,13 @@ This will define a global `Srand` object. If the name `Srand` is already taken, 
 <td>
 
 ```javascript
-const Srand = require('jsrand');
+const Srand = require('seeded-rand');
 ```
 
 or
 
 ```Javascript
-import Srand from 'jsrand';
+import Srand from 'seeded-rand';
 ```
 
 </td>
