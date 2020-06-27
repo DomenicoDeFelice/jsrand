@@ -1,4 +1,5 @@
 # jsrand
+[![Build Status](https://travis-ci.com/DomenicoDeFelice/jsrand.svg?branch=master)](https://travis-ci.com/DomenicoDeFelice/jsrand)
 
 A seeded pseudo-random number generator for JavaScript.
 
@@ -82,7 +83,7 @@ All methods can be used either statically:
 Srand.seed(10); // 10
 Srand.random(); // 0.4569510892033577
 ```
-or instanciating a new generator:
+or instantiating a new generator:
 ```Javascript
 const rnd = new Srand(10);
 rnd.random(); // 0.4569510892033577
