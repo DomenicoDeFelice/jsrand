@@ -10,6 +10,15 @@ jsrand supports saving and restoring the generator state and common operations o
 
 > <sup>*</sup> 1.7KB when served gzipped.
 
+## Table of contents
+  * [Install](#install)
+    * [NPM](#npm)
+    * [Browser](#browser)
+  * [Usage](#usage)
+  * [API](#api)
+    * [`seed`](#seed)
+  * [License](#license)
+
 ## Install
 ### NPM
 ```
@@ -17,15 +26,15 @@ $ npm install jsrand
 ```
 
 ### Browser
-Just download [dist/jsrand.min.js](https://raw.githubusercontent.com/DomenicoDeFelice/jsrand/master/dist/jsrand.min.js) and (optionally) [dist/jsrand.min.js.map](https://raw.githubusercontent.com/DomenicoDeFelice/jsrand/master/dist/jsrand.min.js.map) and include it in your app:
+Just download [dist/jsrand.min.js](https://raw.githubusercontent.com/DomenicoDeFelice/jsrand/master/dist/jsrand.min.js) and (optionally) [dist/jsrand.min.js.map](https://raw.githubusercontent.com/DomenicoDeFelice/jsrand/master/dist/jsrand.min.js.map) and include it in your app.
 
 ## Usage
 
 <table>
 <thead>
 <tr>
-<th>Browser</th>
-<th>NPM</th>
+<th width="50%">Browser</th>
+<th width="50%">NPM</th>
 </tr>
 </thead>
 <tbody>
@@ -72,6 +81,34 @@ othr.random(); // 0.4569510892033577
 
 
 ## API
+
+<table>
+<thead>
+<tr>
+<th width="20%">Method</th>
+<th width="80%">Doc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td id="seed">
+
+```Javascript
+seed(seed?: number): number
+```
+
+</td>
+<td>
+Sets or gets (if no argument is given) the seed.
+
+The seed can be any float or integer number.
+</td>
+</tr>
+</tbody>
+</table>
+
+
+
 If a seed is not specified, a random one is chosen:
 ```Javascript
 var baz = new Srand();
@@ -144,3 +181,9 @@ foo.random(); // => 0.45733246579766273
 
 dfd.Srand.random(); // => 0.9795262040570378
 ```
+
+## License
+
+Provided under the terms of the [MIT License](https://github.com/DomenicoDeFelice/jsrand/blob/master/LICENSE).
+
+Copyright © 2014-2020, [Domenico De Felice](https://domdefelice.net).
