@@ -89,7 +89,7 @@ Srand.setState = Srand.prototype.setState = function (state: State) {
  * - http://en.wikipedia.org/wiki/Random_number_generation#Computational_methods
  * - http://stackoverflow.com/questions/521295/javascript-random-seeds#19301306
  */
-Srand.random = Srand.prototype.random = function () {
+Srand.random = Srand.prototype.random = function (): number {
   if (this._seed == null) {
     this.randomize();
   }
@@ -134,7 +134,7 @@ Srand.intInRange = Srand.prototype.intInRange = function (
  *
  * If arr is empty, an exception is thrown.
  */
-Srand.choice = Srand.prototype.choice = function <T>(arr: Array<T>): ?T {
+Srand.choice = Srand.prototype.choice = function <T>(arr: Array<T>): T {
   if (arr.length === 0) {
     throw new Error('Cannot choose random element from empty array.');
   }
