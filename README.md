@@ -1,12 +1,49 @@
-jsrand
-======
+# jsrand
 
-A simple (~60 LOCs, 1.4KB minified) Javascript library for seeded pseudo-random number generation.  
+A small<sup>*</sup> JavaScript library for seeded pseudo-random number generation.
 
-Numbers are generated using a one-seeded version of the [multiply-with-carry method by George Marsaglia](http://en.wikipedia.org/wiki/Multiply-with-carry). While this method is okay for most applications, it is not cryptographically strong.
+Numbers are generated using a one-seeded version of the [multiply-with-carry method by George Marsaglia](https://en.wikipedia.org/wiki/Multiply-with-carry_pseudorandom_number_generator). While this method is okay for most applications, it is not cryptographically strong.
 
-Usage
------
+jsrand supports saving and restoring the generator state and common operations on arrays: `choice` (pick a random element), `choices` (pick elements at random), `sample` (pick elements at random without repetition) and `shuffle`. 
+
+[See changelog here](https://github.com/DomenicoDeFelice/jsrand/blob/master/CHANGELOG.md).
+
+> <sup>*</sup> 1.7KB when served gzipped.
+
+## Install
+### NPM
+```
+$ npm install jsrand
+```
+
+### Browser
+Just download [dist/jsrand.min.js](https://raw.githubusercontent.com/DomenicoDeFelice/jsrand/master/dist/jsrand.min.js) and (optionally) [dist/jsrand.min.js.map](https://raw.githubusercontent.com/DomenicoDeFelice/jsrand/master/dist/jsrand.min.js.map) and include it in your app:
+
+```HTML
+<script src="jsrand.min.js"></script>
+```
+
+## Usage
+### NPM
+
+```Javascript
+const Srand = require('jsrand');
+```
+
+or
+
+```Javascript
+import Srand from 'jsrand';
+```
+
+Use Srand according to the following API.
+
+### Browser
+The script will create a global `Srand` object, to be used according to the following API.
+
+In the uncommon case the variable `Srand` is already taken, see `noConflict`.
+
+## API
 jsrand can be used statically
 ```Javascript
 Srand.seed(10); // => 10
