@@ -8,7 +8,8 @@
     "build:module": "BABEL_ENV=dev babel src/jsrand.js --out-file dist/jsrand.js",
     "build:browser": "BABEL_ENV=production browserify --debug src/jsrand_browser.js -t [babelify] | exorcist dist/jsrand.min.js.map > dist/jsrand.min.js",
     "flow": "flow",
-    "test": "qunit"
+    "test": "qunit test/tests.js",
+    "test:browser": "opener test/browser_tests.html"
   },
   "repository": {
     "type": "git",
@@ -35,15 +36,14 @@
     "@babel/core": "^7.10.3",
     "@babel/preset-env": "^7.10.3",
     "@babel/preset-flow": "^7.10.1",
+    "array-equal": "^1.0.0",
     "babel-preset-minify": "^0.5.1",
     "babelify": "^10.0.0",
     "exorcist": "^1.0.1",
     "flow-bin": "^0.127.0",
+    "opener": "^1.5.1",
     "prettier": "^2.0.5",
     "qunit": "^2.10.0"
   },
-  "browserslist": "> 0.25%, not dead",
-  "dependencies": {
-    "array-equal": "^1.0.0"
-  }
+  "browserslist": "> 0.25%, not dead"
 }
