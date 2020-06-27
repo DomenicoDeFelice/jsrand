@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+  <head>
+    <title>jsrand browser tests</title>
+    <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.10.0.css">
+  </head>
+  <body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+    <script src="https://code.jquery.com/qunit/qunit-2.10.0.js"></script>
+    <script>
+      //  Used in `browser_tests.js` for testing Srand.noConflict().
+      var Srand = 'original value';
+    </script>
+    <script src="../dist/jsrand.min.js"></script>
+    <script src="browser_tests.js"></script>
+  </body>
+</html>
