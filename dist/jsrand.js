@@ -1,10 +1,10 @@
 /** @format  */
 
 /*!
- * jsrand 2.0 https://github.com/DomenicoDeFelice/jsrand
+ * jsrand - https://github.com/DomenicoDeFelice/jsrand
  *
  * Copyright (c) 2014-2020 Domenico De Felice
- * Released under the MIT License - https://dom.mit-license.org/2014-2020
+ * Released under the MIT License
  *
  * @license
  */
