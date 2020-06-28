@@ -1,9 +1,10 @@
 # jsrand a.k.a. seeded-rand
+<img align="right" src="https://nodei.co/npm/seeded-rand.png" />
+
 [![Build Status][build-status]][build-status-url]
 [![Build Size][build-size]][build-size-url]
 [![NPM Downloads][npm-downloads]][npmtrends-url]
 [![NPM][license]][license-url]
-
 
 A seeded pseudo-random number generator for JavaScript.
 
@@ -38,6 +39,7 @@ jsrand supports saving and restoring the generator state and common operations o
 
 ## Install
 ### NPM
+
 ```
 $ npm install seeded-rand
 ```
