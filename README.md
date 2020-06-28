@@ -1,9 +1,13 @@
 # jsrand a.k.a. seeded-rand
-[![Build Status](https://travis-ci.com/DomenicoDeFelice/jsrand.svg?branch=master)](https://travis-ci.com/DomenicoDeFelice/jsrand)
+[![Build Status][build-status]]([build-status-url])
+[![Build Size][build-size]][build-size-url]
+[![NPM Downloads][npm-downloads]][npmtrends-url]
+[![NPM][license]][license-url]
+
 
 A seeded pseudo-random number generator for JavaScript.
 
-It can be used as either a plain script or as a [Node.js module](https://www.npmjs.com/package/seeded-rand). When served gzipped, it weights only 1.7KB.
+It can be used as either a plain script or as a [Node.js module](https://www.npmjs.com/package/seeded-rand).
 
 Numbers are generated using a one-seeded version of the [multiply-with-carry method by George Marsaglia](https://en.wikipedia.org/wiki/Multiply-with-carry_pseudorandom_number_generator). While this method is okay for most applications, it is not cryptographically strong.
 
@@ -358,4 +362,15 @@ Shuffles `arr` in-place using the Fisher-Yates algorithm and returns it (`arr` i
 
 Copyright © 2014-2020, [Domenico De Felice](https://domdefelice.net).
 
-Provided under the terms of the [MIT License](https://github.com/DomenicoDeFelice/jsrand/blob/master/LICENSE).
+Provided under the terms of the [MIT License][license-url].
+
+
+
+[build-status]: https://travis-ci.com/DomenicoDeFelice/jsrand.svg?branch=master
+[build-status-url]: https://travis-ci.com/DomenicoDeFelice/jsrand
+[build-size]: https://badgen.net/bundlephobia/minzip/seeded-rand
+[build-size-url]: https://bundlephobia.com/result?p=seeded-rand
+[npm-downloads]: https://img.shields.io/npm/dw/seeded-rand
+[npmtrends-url]: https://www.npmtrends.com/seeded-rand
+[license]: https://img.shields.io/npm/l/seeded-rand
+[license-url]: https://github.com/DomenicoDeFelice/jsrand/blob/master/LICENSE
