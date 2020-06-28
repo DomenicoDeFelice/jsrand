@@ -1,5 +1,5 @@
 # jsrand a.k.a. seeded-rand
-[![Build Status][build-status]]([build-status-url])
+[![Build Status][build-status]][build-status-url]
 [![Build Size][build-size]][build-size-url]
 [![NPM Downloads][npm-downloads]][npmtrends-url]
 [![NPM][license]][license-url]
