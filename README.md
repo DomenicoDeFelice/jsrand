@@ -1,5 +1,5 @@
 # jsrand a.k.a. seeded-rand
-<img align="right" src="https://nodei.co/npm/seeded-rand.png" />
+[<img align="right" src="https://nodei.co/npm/seeded-rand.png" />](https://www.npmjs.com/package/seeded-rand)
 
 [![Build Status][build-status]][build-status-url]
 [![Build Size][build-size]][build-size-url]
