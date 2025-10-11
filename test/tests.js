@@ -1,7 +1,7 @@
 /*!
  * jsrand - https://github.com/DomenicoDeFelice/jsrand
  *
- * Copyright (c) 2014-2020 Domenico De Felice
+ * Copyright (c) 2014-2025 Domenico De Felice
  * Released under the MIT License
  *
  * @license

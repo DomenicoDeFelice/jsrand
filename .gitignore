@@ -5,6 +5,10 @@
 /.pnp
 .pnp.js
 
+# testing
+/coverage
+.nyc_output
+
 # misc
 .DS_Store
 .env.local

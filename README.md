@@ -1,7 +1,8 @@
 # jsrand a.k.a. seeded-rand
 [<img align="right" src="https://nodei.co/npm/seeded-rand.png" />](https://www.npmjs.com/package/seeded-rand)
 
-[![Build Status][build-status]][build-status-url]
+[![CI Status][ci-status]][ci-status-url]
+[![Coverage][coverage]][coverage-url]
 [![Build Size][build-size]][build-size-url]
 [![NPM Downloads][npm-downloads]][npmtrends-url]
 [![NPM][license]][license-url]
@@ -12,7 +13,14 @@ It can be used as either a plain script or as a [Node.js module](https://www.npm
 
 Numbers are generated using a one-seeded version of the [multiply-with-carry method by George Marsaglia](https://en.wikipedia.org/wiki/Multiply-with-carry_pseudorandom_number_generator). While this method is okay for most applications, it is not cryptographically strong.
 
-jsrand supports saving and restoring the generator state and common operations on arrays: [`choice`](#choice) (pick a random element), [`choices`](#choices) (pick elements at random), [`sample`](#sample) (pick elements at random without repetition) and [`shuffle`](#shuffle). 
+jsrand supports saving and restoring the generator state and common operations on arrays: [`choice`](#choice) (pick a random element), [`choices`](#choices) (pick elements at random), [`sample`](#sample) (pick elements at random without repetition) and [`shuffle`](#shuffle).
+
+**Features:**
+- ✅ Full TypeScript support with type definitions
+- ✅ ES Module and CommonJS support
+- ✅ Tree-shakeable
+- ✅ Comprehensive test coverage
+- ✅ Works in browser and Node.js
 
 [See changelog here](https://github.com/DomenicoDeFelice/jsrand/blob/master/CHANGELOG.md).
 
@@ -52,8 +60,9 @@ Just download [dist/jsrand.min.js](https://raw.githubusercontent.com/DomenicoDeF
 <table>
 <thead>
 <tr>
-<th width="50%">Plain script</th>
-<th width="50%">NPM</th>
+<th width="33%">Plain script</th>
+<th width="33%">CommonJS</th>
+<th width="34%">ES Module</th>
 </tr>
 </thead>
 <tbody>
@@ -73,9 +82,10 @@ This will define a global `Srand` object. If the name `Srand` is already taken, 
 const Srand = require('seeded-rand');
 ```
 
-or
+</td>
+<td>
 
-```Javascript
+```javascript
 import Srand from 'seeded-rand';
 ```
 
@@ -83,6 +93,8 @@ import Srand from 'seeded-rand';
 </tr>
 </tbody>
 </table>
+
+TypeScript definitions are included automatically.
 
 All methods can be used either statically:
 ```Javascript
@@ -362,14 +374,16 @@ Shuffles `arr` in-place using the Fisher-Yates algorithm and returns it (`arr` i
 
 ## License
 
-Copyright © 2014-2020, [Domenico De Felice](https://domdefelice.net).
+Copyright © 2014-2025, [Domenico De Felice](https://domdefelice.net).
 
 Provided under the terms of the [MIT License][license-url].
 
 
 
-[build-status]: https://travis-ci.com/DomenicoDeFelice/jsrand.svg?branch=master
-[build-status-url]: https://travis-ci.com/DomenicoDeFelice/jsrand
+[ci-status]: https://github.com/DomenicoDeFelice/jsrand/actions/workflows/ci.yml/badge.svg
+[ci-status-url]: https://github.com/DomenicoDeFelice/jsrand/actions/workflows/ci.yml
+[coverage]: https://codecov.io/gh/DomenicoDeFelice/jsrand/branch/master/graph/badge.svg
+[coverage-url]: https://codecov.io/gh/DomenicoDeFelice/jsrand
 [build-size]: https://badgen.net/bundlephobia/minzip/seeded-rand
 [build-size-url]: https://bundlephobia.com/result?p=seeded-rand
 [npm-downloads]: https://img.shields.io/npm/dw/seeded-rand

@@ -1,14 +1,26 @@
 {
   "name": "seeded-rand",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "A simple seeded pseudo-random number generator",
   "main": "dist/jsrand.js",
+  "module": "dist/jsrand.esm.js",
+  "types": "dist/jsrand.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/jsrand.esm.js",
+      "require": "./dist/jsrand.js",
+      "types": "./dist/jsrand.d.ts"
+    }
+  },
+  "sideEffects": false,
   "scripts": {
-    "build": "npm run build:module && npm run build:browser",
+    "build": "npm run build:module && npm run build:esm && npm run build:browser",
     "build:module": "BABEL_ENV=dev babel src/jsrand.js --out-file dist/jsrand.js",
+    "build:esm": "BABEL_ENV=esm babel src/jsrand_esm.js --out-file dist/jsrand.esm.js",
     "build:browser": "BABEL_ENV=production browserify --debug src/jsrand_browser.js -t [babelify] | exorcist dist/jsrand.min.js.map > dist/jsrand.min.js",
     "flow": "flow",
     "test": "qunit test/tests.js",
+    "test:coverage": "c8 --reporter=lcov --reporter=text npm test",
     "test:browser": "opener test/browser_tests.html"
   },
   "repository": {
@@ -23,7 +35,11 @@
     "pseudo-random",
     "random",
     "generator",
-    "marsaglia"
+    "marsaglia",
+    "deterministic",
+    "reproducible",
+    "testing",
+    "typescript"
   ],
   "author": "Dom De Felice",
   "license": "MIT",
@@ -39,6 +55,7 @@
     "array-equal": "^1.0.0",
     "babel-preset-minify": "^0.5.1",
     "babelify": "^10.0.0",
+    "c8": "^10.1.3",
     "exorcist": "^1.0.1",
     "flow-bin": "^0.127.0",
     "opener": "^1.5.1",

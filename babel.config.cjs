@@ -7,8 +7,15 @@ module.exports = function (api) {
   let presets = ['@babel/preset-flow', '@babel/preset-env'];
   let shouldPrintComment = _ => true;
 
+  // Are we building the ESM bundle?
+  if (api.env('esm')) {
+    presets = [
+      '@babel/preset-flow',
+      ['@babel/preset-env', { modules: false }]
+    ];
+  }
   // Are we building the bundle for the browser?
-  if (api.env('production')) {
+  else if (api.env('production')) {
     presets.push('minify');
     shouldPrintComment = val => /@license|@preserve/.test(val);
   }

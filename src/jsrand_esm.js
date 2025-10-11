@@ -218,4 +218,4 @@ Srand.noConflict = function (): Function {
   return Srand;
 };
 
-module.exports = Srand;
+export default Srand;
