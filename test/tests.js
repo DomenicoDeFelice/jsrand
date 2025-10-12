@@ -199,3 +199,176 @@ QUnit.test('shuffle of larger array', assert => {
   assert.notOk(arrayEquals(arr, shuffledArray));
   assert.ok(arrayEquals(arr.sort(), shuffledArray.sort()));
 });
+
+QUnit.test('weightedChoice throws on empty array', assert => {
+  assert.throws(() => Srand.weightedChoice([], []));
+});
+
+QUnit.test('weightedChoice throws on mismatched lengths', assert => {
+  assert.throws(() => Srand.weightedChoice([1, 2, 3], [0.5, 0.5]));
+  assert.throws(() => Srand.weightedChoice([1, 2], [0.5, 0.3, 0.2]));
+});
+
+QUnit.test('weightedChoice throws on negative weights', assert => {
+  assert.throws(() => Srand.weightedChoice([1, 2, 3], [0.5, -0.3, 0.2]));
+});
+
+QUnit.test('weightedChoice throws when all weights are zero', assert => {
+  assert.throws(() => Srand.weightedChoice([1, 2, 3], [0, 0, 0]));
+});
+
+QUnit.test('weightedChoice with single element', assert => {
+  assert.equal(Srand.weightedChoice(['foo'], [1]), 'foo');
+  assert.equal(Srand.weightedChoice(['bar'], [0.5]), 'bar');
+});
+
+QUnit.test('weightedChoice with uniform weights behaves like choice', assert => {
+  Srand.seed(12345);
+  const arr = range(10);
+  const weights = new Array(10).fill(1);
+  const results = new Set();
+
+  for (let i = 0; i < 1000; i++) {
+    results.add(Srand.weightedChoice(arr, weights));
+  }
+
+  // Should get variety with uniform weights
+  assert.ok(results.size > 5, 'Should have variety with uniform weights');
+});
+
+QUnit.test('weightedChoice respects weight distribution', assert => {
+  Srand.seed(12345);
+  const items = ['rare', 'common'];
+  const weights = [1, 99]; // common should be ~99% of results
+  const counts = { rare: 0, common: 0 };
+
+  for (let i = 0; i < 10000; i++) {
+    counts[Srand.weightedChoice(items, weights)]++;
+  }
+
+  const commonPercentage = counts.common / 10000;
+  assert.ok(commonPercentage > 0.97 && commonPercentage < 1.0,
+    `Common should be ~99%, got ${commonPercentage * 100}%`);
+});
+
+QUnit.test('weightedChoice handles zero weights correctly', assert => {
+  Srand.seed(12345);
+  const items = ['never', 'always'];
+  const weights = [0, 1];
+
+  for (let i = 0; i < 100; i++) {
+    assert.equal(Srand.weightedChoice(items, weights), 'always');
+  }
+});
+
+QUnit.test('gaussian generates values with correct distribution', assert => {
+  Srand.seed(12345);
+  const mean = 100;
+  const stddev = 15;
+  const samples = [];
+
+  for (let i = 0; i < 10000; i++) {
+    samples.push(Srand.gaussian(mean, stddev));
+  }
+
+  const sampleMean = samples.reduce((a, b) => a + b, 0) / samples.length;
+  const variance = samples.reduce((sum, val) => sum + Math.pow(val - sampleMean, 2), 0) / samples.length;
+  const sampleStddev = Math.sqrt(variance);
+
+  // Check if sample mean is close to expected mean (within 1%)
+  assert.ok(Math.abs(sampleMean - mean) < mean * 0.01,
+    `Mean should be ~${mean}, got ${sampleMean}`);
+
+  // Check if sample stddev is close to expected stddev (within 10%)
+  assert.ok(Math.abs(sampleStddev - stddev) < stddev * 0.1,
+    `Stddev should be ~${stddev}, got ${sampleStddev}`);
+});
+
+QUnit.test('gaussian with default parameters', assert => {
+  Srand.seed(12345);
+  const samples = [];
+
+  for (let i = 0; i < 1000; i++) {
+    samples.push(Srand.gaussian());
+  }
+
+  const mean = samples.reduce((a, b) => a + b, 0) / samples.length;
+
+  // Default mean should be close to 0
+  assert.ok(Math.abs(mean) < 0.1, `Default mean should be ~0, got ${mean}`);
+});
+
+QUnit.test('exponential throws on invalid lambda', assert => {
+  assert.throws(() => Srand.exponential(0));
+  assert.throws(() => Srand.exponential(-1));
+});
+
+QUnit.test('exponential generates positive values', assert => {
+  Srand.seed(12345);
+
+  for (let i = 0; i < 100; i++) {
+    const value = Srand.exponential(1);
+    assert.ok(value >= 0, 'Exponential values should be non-negative');
+  }
+});
+
+QUnit.test('exponential has correct mean', assert => {
+  Srand.seed(12345);
+  const lambda = 2;
+  const samples = [];
+
+  for (let i = 0; i < 10000; i++) {
+    samples.push(Srand.exponential(lambda));
+  }
+
+  const sampleMean = samples.reduce((a, b) => a + b, 0) / samples.length;
+  const expectedMean = 1 / lambda;
+
+  // Sample mean should be close to 1/lambda (within 10%)
+  assert.ok(Math.abs(sampleMean - expectedMean) < expectedMean * 0.1,
+    `Mean should be ~${expectedMean}, got ${sampleMean}`);
+});
+
+QUnit.test('poisson throws on invalid lambda', assert => {
+  assert.throws(() => Srand.poisson(0));
+  assert.throws(() => Srand.poisson(-1));
+});
+
+QUnit.test('poisson generates non-negative integers', assert => {
+  Srand.seed(12345);
+
+  for (let i = 0; i < 100; i++) {
+    const value = Srand.poisson(5);
+    assert.ok(value >= 0, 'Poisson values should be non-negative');
+    assert.equal(value % 1, 0, 'Poisson values should be integers');
+  }
+});
+
+QUnit.test('poisson has correct mean', assert => {
+  Srand.seed(12345);
+  const lambda = 5;
+  const samples = [];
+
+  for (let i = 0; i < 10000; i++) {
+    samples.push(Srand.poisson(lambda));
+  }
+
+  const sampleMean = samples.reduce((a, b) => a + b, 0) / samples.length;
+
+  // Sample mean should be close to lambda (within 10%)
+  assert.ok(Math.abs(sampleMean - lambda) < lambda * 0.1,
+    `Mean should be ~${lambda}, got ${sampleMean}`);
+});
+
+QUnit.test('poisson with small lambda', assert => {
+  Srand.seed(12345);
+  const samples = [];
+
+  for (let i = 0; i < 1000; i++) {
+    samples.push(Srand.poisson(0.5));
+  }
+
+  // Most values should be 0 or 1 with lambda=0.5
+  const lowValues = samples.filter(v => v <= 1).length;
+  assert.ok(lowValues > 900, 'Most values should be 0 or 1 with small lambda');
+});

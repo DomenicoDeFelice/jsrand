@@ -176,7 +176,7 @@ Srand.sample = Srand.prototype.sample = function <T>(
   }
 
   if (k === arr.length) {
-    return [...arr];
+    return this.shuffle([...arr]);
   }
 
   const maxIndex = arr.length - 1;
@@ -212,10 +212,125 @@ Srand.shuffle = Srand.prototype.shuffle = function <T>(
   return arr;
 };
 
+/**
+ * Return a random element from arr based on the provided weights.
+ *
+ * Weights should be positive numbers. They will be normalized internally,
+ * so [1, 2, 3] is equivalent to [0.166, 0.333, 0.5].
+ *
+ * If arr is empty, an exception is thrown.
+ * If weights array length doesn't match arr length, an exception is thrown.
+ * If all weights are zero or negative, an exception is thrown.
+ */
+Srand.weightedChoice = Srand.prototype.weightedChoice = function <T>(
+  arr: Array<T>,
+  weights: Array<number>
+): T {
+  if (arr.length === 0) {
+    throw new Error('Cannot choose random element from empty array.');
+  }
+
+  if (arr.length !== weights.length) {
+    throw new Error('Items and weights must have the same length.');
+  }
+
+  // Calculate total weight
+  let totalWeight = 0;
+  for (let i = 0; i < weights.length; i++) {
+    if (weights[i] < 0) {
+      throw new Error('Weights must be non-negative.');
+    }
+    totalWeight += weights[i];
+  }
+
+  if (totalWeight === 0) {
+    throw new Error('At least one weight must be greater than zero.');
+  }
+
+  // Generate random value between 0 and totalWeight
+  const randomValue = this.random() * totalWeight;
+
+  // Find the item corresponding to this value
+  let cumulativeWeight = 0;
+  for (let i = 0; i < arr.length; i++) {
+    cumulativeWeight += weights[i];
+    if (randomValue < cumulativeWeight) {
+      return arr[i];
+    }
+  }
+
+  return arr[arr.length - 1];
+};
+
+/**
+ * Return a random number from a Gaussian (normal) distribution.
+ *
+ * Uses the Box-Muller transform to generate normally distributed values.
+ *
+ * @param mean - The mean (center) of the distribution (default: 0)
+ * @param stddev - The standard deviation (spread) of the distribution (default: 1)
+ */
+Srand.gaussian = Srand.prototype.gaussian = function (
+  mean: number = 0,
+  stddev: number = 1
+): number {
+  // Box-Muller transform
+  const u1 = this.random();
+  const u2 = this.random();
+
+  const z0 = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
+
+  return z0 * stddev + mean;
+};
+
+/**
+ * Return a random number from an exponential distribution.
+ *
+ * Useful for modeling time between events in a Poisson process.
+ *
+ * @param lambda - The rate parameter (lambda > 0). Higher values produce smaller numbers.
+ */
+Srand.exponential = Srand.prototype.exponential = function (
+  lambda: number
+): number {
+  if (lambda <= 0) {
+    throw new Error('For exponential distributions, lambda must be positive.');
+  }
+
+  return -Math.log(1 - this.random()) / lambda;
+};
+
+/**
+ * Return a random integer from a Poisson distribution.
+ *
+ * Useful for modeling the number of events in a fixed interval.
+ *
+ * @param lambda - The expected number of events (lambda > 0)
+ */
+Srand.poisson = Srand.prototype.poisson = function (
+  lambda: number
+): number {
+  if (lambda <= 0) {
+    throw new Error('For Poisson distributions, lambda must be positive.');
+  }
+
+  // Knuth's algorithm for Poisson distribution
+  const L = Math.exp(-lambda);
+  let k = 0;
+  let p = 1;
+
+  do {
+    k++;
+    p *= this.random();
+  } while (p > L);
+
+  return k - 1;
+};
+
 // Keep flow happy.
 Srand._oldSrand = undefined;
 Srand.noConflict = function (): Function {
   return Srand;
 };
 
-module.exports = Srand;
+export default Srand;

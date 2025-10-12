@@ -1,5 +1,3 @@
-/** @format  */
-
 /*!
  * jsrand - https://github.com/DomenicoDeFelice/jsrand
  *
@@ -10,20 +8,6 @@
  */
 'use strict';
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 function Srand(seed) {
   if (seed != null) {
     this.seed(seed);
@@ -31,7 +15,6 @@ function Srand(seed) {
     this.randomize();
   }
 }
-
 Srand.prototype = {};
 
 /**
@@ -72,10 +55,9 @@ Srand.getState = Srand.prototype.getState = function () {
  * Resume a state previously returned by getState.
  */
 Srand.setState = Srand.prototype.setState = function (state) {
-  if (state == null || _typeof(state) !== 'object' || typeof state.seed !== 'number' || typeof state.mz !== 'number' || typeof state.mw !== 'number') {
+  if (state == null || typeof state !== 'object' || typeof state.seed !== 'number' || typeof state.mz !== 'number' || typeof state.mw !== 'number') {
     throw new Error('Invalid state.');
   }
-
   this._seed = state.seed;
   this._mz = state.mz;
   this._mw = state.mw;
@@ -94,9 +76,8 @@ Srand.random = Srand.prototype.random = function () {
   if (this._seed == null) {
     this.randomize();
   }
-
-  var mz = this._mz;
-  var mw = this._mw;
+  let mz = this._mz;
+  let mw = this._mw;
 
   // The 16 least significant bits are multiplied by a constant
   // and then added to the 16 most significant bits. 32 bits result.
@@ -104,7 +85,7 @@ Srand.random = Srand.prototype.random = function () {
   mw = (mw & 0xffff) * 18000 + (mw >> 16) & 0xffffffff;
   this._mz = mz;
   this._mw = mw;
-  var x = ((mz << 16) + mw & 0xffffffff) / 0x100000000;
+  const x = ((mz << 16) + mw & 0xffffffff) / 0x100000000;
   return 0.5 + x;
 };
 
@@ -131,8 +112,7 @@ Srand.choice = Srand.prototype.choice = function (arr) {
   if (arr.length === 0) {
     throw new Error('Cannot choose random element from empty array.');
   }
-
-  var randomIndex = this.intInRange(0, arr.length - 1);
+  const randomIndex = this.intInRange(0, arr.length - 1);
   return arr[randomIndex];
 };
 
@@ -143,12 +123,10 @@ Srand.choice = Srand.prototype.choice = function (arr) {
  * If k > 0 and arr is empty, throws an exception.
  */
 Srand.choices = Srand.prototype.choices = function (arr, k) {
-  var sample = new Array(k);
-
-  for (var i = 0; i < k; i++) {
+  const sample = new Array(k);
+  for (let i = 0; i < k; i++) {
     sample[i] = this.choice(arr);
   }
-
   return sample;
 };
 
@@ -161,24 +139,19 @@ Srand.sample = Srand.prototype.sample = function (arr, k) {
   if (k > arr.length) {
     throw new Error('Sample size cannot exceed population size.');
   }
-
   if (k === arr.length) {
-    return _toConsumableArray(arr);
+    return this.shuffle([...arr]);
   }
-
-  var maxIndex = arr.length - 1;
-  var sample = new Array(k);
-  var selected = {};
-
-  for (var i = 0, j; i < k; i++) {
+  const maxIndex = arr.length - 1;
+  const sample = new Array(k);
+  const selected = {};
+  for (let i = 0, j; i < k; i++) {
     do {
       j = this.intInRange(0, maxIndex);
     } while (selected[j]);
-
     sample[i] = arr[j];
     selected[j] = true;
   }
-
   return sample;
 };
 
@@ -187,21 +160,115 @@ Srand.sample = Srand.prototype.sample = function (arr, k) {
  * (the input array is modified).
  */
 Srand.shuffle = Srand.prototype.shuffle = function (arr) {
-  for (var i = arr.length - 1; i > 0; i--) {
-    var j = this.intInRange(0, i - 1);
-    var temp = arr[i];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = this.intInRange(0, i - 1);
+    const temp = arr[i];
     arr[i] = arr[j];
     arr[j] = temp;
   }
-
   return arr;
+};
+
+/**
+ * Return a random element from arr based on the provided weights.
+ *
+ * Weights should be positive numbers. They will be normalized internally,
+ * so [1, 2, 3] is equivalent to [0.166, 0.333, 0.5].
+ *
+ * If arr is empty, an exception is thrown.
+ * If weights array length doesn't match arr length, an exception is thrown.
+ * If all weights are zero or negative, an exception is thrown.
+ */
+Srand.weightedChoice = Srand.prototype.weightedChoice = function (arr, weights) {
+  if (arr.length === 0) {
+    throw new Error('Cannot choose random element from empty array.');
+  }
+  if (arr.length !== weights.length) {
+    throw new Error('Items and weights must have the same length.');
+  }
+
+  // Calculate total weight
+  let totalWeight = 0;
+  for (let i = 0; i < weights.length; i++) {
+    if (weights[i] < 0) {
+      throw new Error('Weights must be non-negative.');
+    }
+    totalWeight += weights[i];
+  }
+  if (totalWeight === 0) {
+    throw new Error('At least one weight must be greater than zero.');
+  }
+
+  // Generate random value between 0 and totalWeight
+  const randomValue = this.random() * totalWeight;
+
+  // Find the item corresponding to this value
+  let cumulativeWeight = 0;
+  for (let i = 0; i < arr.length; i++) {
+    cumulativeWeight += weights[i];
+    if (randomValue < cumulativeWeight) {
+      return arr[i];
+    }
+  }
+  return arr[arr.length - 1];
+};
+
+/**
+ * Return a random number from a Gaussian (normal) distribution.
+ *
+ * Uses the Box-Muller transform to generate normally distributed values.
+ *
+ * @param mean - The mean (center) of the distribution (default: 0)
+ * @param stddev - The standard deviation (spread) of the distribution (default: 1)
+ */
+Srand.gaussian = Srand.prototype.gaussian = function (mean = 0, stddev = 1) {
+  // Box-Muller transform
+  const u1 = this.random();
+  const u2 = this.random();
+  const z0 = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
+  return z0 * stddev + mean;
+};
+
+/**
+ * Return a random number from an exponential distribution.
+ *
+ * Useful for modeling time between events in a Poisson process.
+ *
+ * @param lambda - The rate parameter (lambda > 0). Higher values produce smaller numbers.
+ */
+Srand.exponential = Srand.prototype.exponential = function (lambda) {
+  if (lambda <= 0) {
+    throw new Error('For exponential distributions, lambda must be positive.');
+  }
+  return -Math.log(1 - this.random()) / lambda;
+};
+
+/**
+ * Return a random integer from a Poisson distribution.
+ *
+ * Useful for modeling the number of events in a fixed interval.
+ *
+ * @param lambda - The expected number of events (lambda > 0)
+ */
+Srand.poisson = Srand.prototype.poisson = function (lambda) {
+  if (lambda <= 0) {
+    throw new Error('For Poisson distributions, lambda must be positive.');
+  }
+
+  // Knuth's algorithm for Poisson distribution
+  const L = Math.exp(-lambda);
+  let k = 0;
+  let p = 1;
+  do {
+    k++;
+    p *= this.random();
+  } while (p > L);
+  return k - 1;
 };
 
 // Keep flow happy.
 Srand._oldSrand = undefined;
-
 Srand.noConflict = function () {
   return Srand;
 };
-
 export default Srand;

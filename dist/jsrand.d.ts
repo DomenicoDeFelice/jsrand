@@ -86,6 +86,46 @@ export interface SrandInstance {
    * (the input array is modified).
    */
   shuffle<T>(arr: T[]): T[];
+
+  /**
+   * Return a random element from arr based on the provided weights.
+   *
+   * Weights should be positive numbers. They will be normalized internally,
+   * so [1, 2, 3] is equivalent to [0.166, 0.333, 0.5].
+   *
+   * If arr is empty, an exception is thrown.
+   * If weights array length doesn't match arr length, an exception is thrown.
+   * If all weights are zero or negative, an exception is thrown.
+   */
+  weightedChoice<T>(arr: T[], weights: number[]): T;
+
+  /**
+   * Return a random number from a Gaussian (normal) distribution.
+   *
+   * Uses the Box-Muller transform to generate normally distributed values.
+   *
+   * @param mean - The mean (center) of the distribution (default: 0)
+   * @param stddev - The standard deviation (spread) of the distribution (default: 1)
+   */
+  gaussian(mean?: number, stddev?: number): number;
+
+  /**
+   * Return a random number from an exponential distribution.
+   *
+   * Useful for modeling time between events in a Poisson process.
+   *
+   * @param lambda - The rate parameter (lambda > 0). Higher values produce smaller numbers.
+   */
+  exponential(lambda: number): number;
+
+  /**
+   * Return a random integer from a Poisson distribution.
+   *
+   * Useful for modeling the number of events in a fixed interval.
+   *
+   * @param lambda - The expected number of events (lambda > 0)
+   */
+  poisson(lambda: number): number;
 }
 
 /**

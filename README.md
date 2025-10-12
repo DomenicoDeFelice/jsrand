@@ -16,13 +16,15 @@ Numbers are generated using a one-seeded version of the [multiply-with-carry met
 jsrand supports saving and restoring the generator state and common operations on arrays: [`choice`](#choice) (pick a random element), [`choices`](#choices) (pick elements at random), [`sample`](#sample) (pick elements at random without repetition) and [`shuffle`](#shuffle).
 
 **Features:**
+- ✅ Seeded PRNG, giving you deterministic reproducibility of sequences
+- ✅ Helper methods, probability-weighted selections and statistical distributions for all your use cases
 - ✅ Full TypeScript support with type definitions
 - ✅ ES Module and CommonJS support
 - ✅ Tree-shakeable
 - ✅ Comprehensive test coverage
 - ✅ Works in browser and Node.js
 
-[See changelog here](https://github.com/DomenicoDeFelice/jsrand/blob/master/CHANGELOG.md).
+[See changelog](https://github.com/DomenicoDeFelice/jsrand/blob/master/CHANGELOG.md)
 
 ## Table of contents
   * [Install](#install)
@@ -33,16 +35,20 @@ jsrand supports saving and restoring the generator state and common operations o
   * [API](#api)
     * [`choice`](#choice)
     * [`choices`](#choices)
+    * [`exponential`](#exponential)
+    * [`gaussian`](#gaussian)
     * [`getState`](#getstate)
     * [`inRange`](#inrange)
     * [`intInRange`](#intinrange)
     * [`noConflict`](#noconflict)
+    * [`poisson`](#poisson)
     * [`random`](#random)
     * [`randomize`](#randomize)
     * [`sample`](#sample)
     * [`seed`](#seed)
     * [`setState`](#setstate)
     * [`shuffle`](#shuffle)
+    * [`weightedChoice`](#weightedchoice)
   * [License](#license)
 
 ## Install
@@ -101,6 +107,7 @@ All methods can be used either statically:
 Srand.seed(10); // 10
 Srand.random(); // 0.4569510892033577
 ```
+
 or instantiating a new generator:
 ```Javascript
 const rnd = new Srand(10);
@@ -212,6 +219,60 @@ For an alternative without replacement, see [`sample`](#sample).
 </tr>
 <tr></tr>
 <tr>
+<td id="exponential">
+
+```Javascript
+exponential(lambda: number): number
+```
+
+</td>
+<td>
+
+Returns a random number from an exponential distribution.
+
+Useful for modeling time between events in a Poisson process (e.g., time between arrivals, radioactive decay).
+
+**Parameters:**
+- `lambda` - The rate parameter (lambda > 0). Higher values produce smaller numbers.
+
+**Example:**
+```javascript
+// Average 5 events per second → lambda=5
+// Time until next event in seconds
+const timeUntilNext = Srand.exponential(5);
+```
+</td>
+</tr>
+<tr></tr>
+<tr>
+<td id="gaussian">
+
+```Javascript
+gaussian(mean?: number, stddev?: number): number
+```
+
+</td>
+<td>
+
+Returns a random number from a Gaussian (normal) distribution.
+
+Uses the Box-Muller transform to generate normally distributed values.
+
+**Parameters:**
+- `mean` - The mean (center) of the distribution (default: 0)
+- `stddev` - The standard deviation (spread) of the distribution (default: 1)
+
+**Example:**
+```javascript
+// IQ scores: mean=100, stddev=15
+const iq = Srand.gaussian(100, 15);
+```
+
+Useful for simulations, procedural generation, and statistical modeling.
+</td>
+</tr>
+<tr></tr>
+<tr>
 <td id="getstate">
 
 ```Javascript
@@ -277,6 +338,33 @@ const mySrand = Srand.noConflict();
 Srand; // "my value"
 ```
 
+</td>
+</tr>
+<tr></tr>
+<tr>
+<td id="poisson">
+
+```Javascript
+poisson(lambda: number): number
+```
+
+</td>
+<td>
+
+Returns a random integer from a Poisson distribution.
+
+Useful for modeling the number of events occurring in a fixed interval (e.g., number of calls per hour, bugs per line of code).
+
+**Parameters:**
+- `lambda` - The expected number of events (lambda > 0)
+
+**Example:**
+```javascript
+// Average 3 customers per hour
+const customers = Srand.poisson(3);
+```
+
+Uses Knuth's algorithm for generating Poisson-distributed values.
 </td>
 </tr>
 <tr></tr>
@@ -369,8 +457,44 @@ shuffle(arr: Array<T>): Array<T>
 Shuffles `arr` in-place using the Fisher-Yates algorithm and returns it (`arr` is modified).
 </td>
 </tr>
+<tr></tr>
+<tr>
+<td id="weightedchoice">
+
+```Javascript
+weightedChoice(arr: Array<T>, weights: Array<number>): T
+```
+
+</td>
+<td>
+
+Returns a random element from `arr` based on the provided `weights`.
+
+Weights should be positive numbers and will be normalized internally, so `[1, 2, 3]` is equivalent to `[0.166, 0.333, 0.5]`.
+
+**Example:**
+```javascript
+// 90% common, 10% rare loot drops
+const loot = Srand.weightedChoice(
+  ['common', 'rare', 'legendary'],
+  [90, 9, 1]
+);
+```
+
+If `arr` is empty, `weights` length doesn't match `arr` length, or all weights are zero/negative, an exception is thrown.
+</td>
+</tr>
 </tbody>
 </table>
+
+## Performance
+
+Run benchmarks with:
+```bash
+npm run benchmark
+```
+
+While jsrand is optimized for deterministic reproducibility rather than raw speed, the benchmarks (see the [benchmarks results and script](https://github.com/DomenicoDeFelice/jsrand/blob/master/benchmark/)) show `Srand.random()` is approximately 20-30% faster than `Math.random()` (YMMV depending on the machine).
 
 ## License
 
