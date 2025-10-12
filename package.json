@@ -1,6 +1,6 @@
 {
   "name": "seeded-rand",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "A simple seeded pseudo-random number generator",
   "main": "dist/jsrand.js",
   "module": "dist/jsrand.esm.js",
