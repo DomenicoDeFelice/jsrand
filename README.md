@@ -13,11 +13,12 @@ It can be used as either a plain script or as a [Node.js module](https://www.npm
 
 Numbers are generated using a one-seeded version of the [multiply-with-carry method by George Marsaglia](https://en.wikipedia.org/wiki/Multiply-with-carry_pseudorandom_number_generator). While this method is okay for most applications, it is not cryptographically strong.
 
-jsrand supports saving and restoring the generator state and common operations on arrays: [`choice`](#choice) (pick a random element), [`choices`](#choices) (pick elements at random), [`sample`](#sample) (pick elements at random without repetition) and [`shuffle`](#shuffle).
-
 **Features:**
 - ✅ Seeded PRNG, giving you deterministic reproducibility of sequences
-- ✅ Helper methods, probability-weighted selections and statistical distributions for all your use cases
+- ✅ Ability to save and restore the generator state
+- ✅ Common operations on arrays like [`choice`](#choice) (pick a random element), [`choices`](#choices) (pick elements at random), [`sample`](#sample) (pick elements at random without repetition), [`shuffle`](#shuffle) and more
+- ✅ Probability-weighted selections ([`weightedChoice`](#weightedchoice))
+- ✅ Statistical distributions ([`exponential`](#exponential), [`gaussian`](#gaussian), [`poisson`](#poisson))
 - ✅ Full TypeScript support with type definitions
 - ✅ ES Module and CommonJS support
 - ✅ Tree-shakeable
@@ -49,6 +50,7 @@ jsrand supports saving and restoring the generator state and common operations o
     * [`setState`](#setstate)
     * [`shuffle`](#shuffle)
     * [`weightedChoice`](#weightedchoice)
+  * [Performance](#performance)
   * [License](#license)
 
 ## Install
