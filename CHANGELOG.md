@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.0] - 2025-10-19
+
+### ⚠️ BREAKING CHANGES
+- **Seed hashing**: Seeds are now hashed before use to eliminate correlation and performance degradation
+  - **Previous behavior**: Consecutive seeds (like Unix timestamps) produced highly correlated outputs; performance degraded for seeds longer than 16 bits
+  - **New behavior**: All seeds are hashed using MurmurHash3-inspired algorithm and normalized to 16 bits
+  - **Impact**: The same seed will produce a **different sequence** than in v3.x
+  - **Why**: Fixes correlation issue where consecutive seeds produced predictable patterns (Pearson correlation = 1.0)
+  - **Thanks**: Correlation issues reported by [@gajus](https://github.com/gajus) (Gajus Kuizinas) in [#3](https://github.com/DomenicoDeFelice/jsrand/issues/3) and [@Zt-freak](https://github.com/Zt-freak) (Emily) in [#7](https://github.com/DomenicoDeFelice/jsrand/issues/7)
+
+### Added
+- Test for seed correlation to prevent regression
+
+### Fixed
+- Consecutive seeds no longer produce correlated random sequences
+- Performance no longer degrades with large seed values
+
 ## [3.0.2] - 2025-10-12
 
 ### Documentation
@@ -18,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **New behavior**: Returns elements in random order (properly shuffled)
   - **Migration**: If you need the old behavior, use `[...arr]` instead of `sample(arr, arr.length)`
   - **Why**: The previous behavior was a bug. Sampling should always return random order
-  - **Thanks**: Bug reported by [@xanatos](https://github.com/xanatos) (Massimiliano Alberti)
+  - **Thanks**: Bug reported by [@xanatos](https://github.com/xanatos) (Massimiliano Alberti) in [#10](https://github.com/DomenicoDeFelice/jsrand/issues/10)
 
 ### Added
 - **Weighted random choice**: New `weightedChoice(arr, weights)` method for probability-weighted selection

@@ -25,11 +25,25 @@ Srand.seed = Srand.prototype.seed = function (seed) {
   if (seed == null) {
     return this._seed;
   }
+  this._seed = seed;
 
+  // Hash the seed to avoid correlation between consecutive seeds.
+  // Using MurmurHash3-inspired finalizer for good mixing.
+  let h = seed | 0; // Convert to 32-bit integer
+  h ^= h >>> 16;
+  h = Math.imul(h, 0x85ebca6b);
+  h ^= h >>> 13;
+  h = Math.imul(h, 0xc2b2ae35);
+  h ^= h >>> 16;
+
+  // Extract 16 bits for optimal performance.
+  // Ensure not zero (required by MWC algorithm).
+  const hashedSeed = h & 0xffff | 1;
+  this._mw = hashedSeed;
   // Use only one seed (mw), mz is fixed.
   // Must not be zero, nor 0x9068ffff.
   this._mz = 123456789;
-  return this._mw = this._seed = seed;
+  return seed;
 };
 
 /**
