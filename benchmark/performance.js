@@ -32,25 +32,41 @@ function addToOutput(text) {
   markdownOutput += text + '\n';
 }
 
-// Benchmark runner
-function benchmark(name, fn, iterations = 1000000) {
-  // Warm up
-  for (let i = 0; i < 1000; i++) fn();
+// Benchmark runner - runs multiple times with different seeds and averages results
+function benchmark(name, fn, iterations = 1000000, runs = 5, reseedFn = null) {
+  const results = [];
 
-  const start = process.hrtime.bigint();
-  for (let i = 0; i < iterations; i++) {
-    fn();
+  for (let run = 0; run < runs; run++) {
+    // Reseed with a different seed for each run to avoid seed-dependent performance
+    if (reseedFn) {
+      const randomSeed = 12345 + run * 1000 + Math.floor(Math.random() * 1000);
+      reseedFn(randomSeed);
+    }
+
+    // Warm up
+    for (let i = 0; i < 1000; i++) fn();
+
+    const start = process.hrtime.bigint();
+    for (let i = 0; i < iterations; i++) {
+      fn();
+    }
+    const end = process.hrtime.bigint();
+
+    const durationMs = Number(end - start) / 1000000;
+    const opsPerSec = (iterations / durationMs) * 1000;
+
+    results.push({ durationMs, opsPerSec });
   }
-  const end = process.hrtime.bigint();
 
-  const durationMs = Number(end - start) / 1000000;
-  const opsPerSec = (iterations / durationMs) * 1000;
+  // Calculate averages
+  const avgDurationMs = results.reduce((sum, r) => sum + r.durationMs, 0) / runs;
+  const avgOpsPerSec = results.reduce((sum, r) => sum + r.opsPerSec, 0) / runs;
 
   return {
     name,
     iterations,
-    durationMs,
-    opsPerSec
+    durationMs: avgDurationMs,
+    opsPerSec: avgOpsPerSec
   };
 }
 
@@ -75,55 +91,56 @@ function runBenchmarks() {
   addToOutput(`- **Node.js**: ${machineInfo.nodeVersion}\n`);
 
   const rnd = new Srand(12345);
+  const reseed = (seed) => rnd.seed(seed);
   const arr100 = Array.from({ length: 100 }, (_, i) => i);
   const weights100 = new Array(100).fill(1);
 
   addToOutput('## Basic Operations\n');
   addToOutput('| Operation | Iterations | Duration | Ops/sec |');
   addToOutput('|-----------|------------|----------|---------|');
-  addToOutput(formatBenchmarkRow(benchmark('random()', () => rnd.random())));
-  addToOutput(formatBenchmarkRow(benchmark('inRange(0, 100)', () => rnd.inRange(0, 100))));
-  addToOutput(formatBenchmarkRow(benchmark('intInRange(0, 100)', () => rnd.intInRange(0, 100))));
+  addToOutput(formatBenchmarkRow(benchmark('random()', () => rnd.random(), 1000000, 5, reseed)));
+  addToOutput(formatBenchmarkRow(benchmark('inRange(0, 100)', () => rnd.inRange(0, 100), 1000000, 5, reseed)));
+  addToOutput(formatBenchmarkRow(benchmark('intInRange(0, 100)', () => rnd.intInRange(0, 100), 1000000, 5, reseed)));
   addToOutput('');
 
   addToOutput('## Array Operations\n');
   addToOutput('| Operation | Iterations | Duration | Ops/sec |');
   addToOutput('|-----------|------------|----------|---------|');
-  addToOutput(formatBenchmarkRow(benchmark('choice(100 items)', () => rnd.choice(arr100))));
-  addToOutput(formatBenchmarkRow(benchmark('choices(100 items, k=10)', () => rnd.choices(arr100, 10), 100000)));
-  addToOutput(formatBenchmarkRow(benchmark('sample(100 items, k=10)', () => rnd.sample(arr100, 10), 100000)));
-  addToOutput(formatBenchmarkRow(benchmark('shuffle(100 items)', () => rnd.shuffle([...arr100]), 100000)));
+  addToOutput(formatBenchmarkRow(benchmark('choice(100 items)', () => rnd.choice(arr100), 1000000, 5, reseed)));
+  addToOutput(formatBenchmarkRow(benchmark('choices(100 items, k=10)', () => rnd.choices(arr100, 10), 100000, 5, reseed)));
+  addToOutput(formatBenchmarkRow(benchmark('sample(100 items, k=10)', () => rnd.sample(arr100, 10), 100000, 5, reseed)));
+  addToOutput(formatBenchmarkRow(benchmark('shuffle(100 items)', () => rnd.shuffle([...arr100]), 100000, 5, reseed)));
   addToOutput('');
 
   addToOutput('## Weighted Choice\n');
   addToOutput('| Operation | Iterations | Duration | Ops/sec |');
   addToOutput('|-----------|------------|----------|---------|');
-  addToOutput(formatBenchmarkRow(benchmark('weightedChoice(100 items)', () => rnd.weightedChoice(arr100, weights100))));
+  addToOutput(formatBenchmarkRow(benchmark('weightedChoice(100 items)', () => rnd.weightedChoice(arr100, weights100), 1000000, 5, reseed)));
   addToOutput('');
 
   addToOutput('## Statistical Distributions\n');
   addToOutput('| Operation | Iterations | Duration | Ops/sec |');
   addToOutput('|-----------|------------|----------|---------|');
-  addToOutput(formatBenchmarkRow(benchmark('gaussian()', () => rnd.gaussian())));
-  addToOutput(formatBenchmarkRow(benchmark('gaussian(100, 15)', () => rnd.gaussian(100, 15))));
-  addToOutput(formatBenchmarkRow(benchmark('exponential(1)', () => rnd.exponential(1))));
-  addToOutput(formatBenchmarkRow(benchmark('poisson(5)', () => rnd.poisson(5), 100000)));
+  addToOutput(formatBenchmarkRow(benchmark('gaussian()', () => rnd.gaussian(), 1000000, 5, reseed)));
+  addToOutput(formatBenchmarkRow(benchmark('gaussian(100, 15)', () => rnd.gaussian(100, 15), 1000000, 5, reseed)));
+  addToOutput(formatBenchmarkRow(benchmark('exponential(1)', () => rnd.exponential(1), 1000000, 5, reseed)));
+  addToOutput(formatBenchmarkRow(benchmark('poisson(5)', () => rnd.poisson(5), 100000, 5, reseed)));
   addToOutput('');
 
   addToOutput('## State Operations\n');
   addToOutput('| Operation | Iterations | Duration | Ops/sec |');
   addToOutput('|-----------|------------|----------|---------|');
-  addToOutput(formatBenchmarkRow(benchmark('getState()', () => rnd.getState())));
+  addToOutput(formatBenchmarkRow(benchmark('getState()', () => rnd.getState(), 1000000, 5, reseed)));
   const state = rnd.getState();
-  addToOutput(formatBenchmarkRow(benchmark('setState()', () => rnd.setState(state))));
+  addToOutput(formatBenchmarkRow(benchmark('setState()', () => rnd.setState(state), 1000000, 5, reseed)));
   addToOutput('');
 
   addToOutput('## Comparison with Math.random()\n');
   addToOutput('| Operation | Iterations | Duration | Ops/sec |');
   addToOutput('|-----------|------------|----------|---------|');
-  const srandResult = benchmark('Srand.random()', () => rnd.random());
+  const srandResult = benchmark('Srand.random()', () => rnd.random(), 1000000, 5, reseed);
   addToOutput(formatBenchmarkRow(srandResult));
-  const mathResult = benchmark('Math.random()', () => Math.random());
+  const mathResult = benchmark('Math.random()', () => Math.random(), 1000000, 5);
   addToOutput(formatBenchmarkRow(mathResult));
   addToOutput('');
 

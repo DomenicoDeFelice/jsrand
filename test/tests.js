@@ -372,3 +372,43 @@ QUnit.test('poisson with small lambda', assert => {
   const lowValues = samples.filter(v => v <= 1).length;
   assert.ok(lowValues > 900, 'Most values should be 0 or 1 with small lambda');
 });
+
+QUnit.test('consecutive seeds should not produce correlated first random values', assert => {
+  // This test verifies that using consecutive seeds (like Unix timestamps)
+  // doesn't produce predictable/correlated first random values
+  const baseTimestamp = 1700000000;
+  const samples = [];
+
+  // Collect first random value for 100 consecutive seeds
+  for (let i = 0; i < 100; i++) {
+    const seed = baseTimestamp + i;
+    const rng = new Srand(seed);
+    const firstRandom = rng.random();
+    samples.push({ seed, firstRandom });
+  }
+
+  // Calculate Pearson correlation coefficient
+  const n = samples.length;
+  const seedMean = samples.reduce((sum, s) => sum + s.seed, 0) / n;
+  const randomMean = samples.reduce((sum, s) => sum + s.firstRandom, 0) / n;
+
+  let numerator = 0;
+  let seedVariance = 0;
+  let randomVariance = 0;
+
+  for (let i = 0; i < n; i++) {
+    const seedDiff = samples[i].seed - seedMean;
+    const randomDiff = samples[i].firstRandom - randomMean;
+    numerator += seedDiff * randomDiff;
+    seedVariance += seedDiff * seedDiff;
+    randomVariance += randomDiff * randomDiff;
+  }
+
+  const correlation = Math.abs(numerator / Math.sqrt(seedVariance * randomVariance));
+
+  // Correlation should be low (< 0.5 indicates weak correlation)
+  // Values close to 1.0 indicate strong correlation which is bad for consecutive seeds
+  assert.ok(correlation < 0.5,
+    `Seed correlation should be < 0.5, got ${correlation.toFixed(6)}. ` +
+    `High correlation means consecutive seeds produce predictable sequences.`);
+});
